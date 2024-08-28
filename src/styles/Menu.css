@@ -1,0 +1,17 @@
+ul {
+    display: flex;
+    padding: 6px;
+
+}
+
+li {
+    padding: 10px 0px 10px 20px;
+}
+
+ul li a {
+    color: #626262
+}
+
+a:hover {
+    color: #0f00b2
+}
