@@ -1,17 +1,17 @@
-ul {
+.menu-bar {
     display: flex;
     padding: 6px;
 
 }
 
-li {
+.menu-bar li {
     padding: 10px 0px 10px 20px;
 }
 
-ul li a {
+.menu-bar li a {
     color: #626262
 }
 
-a:hover {
+.menu-bar a:hover {
     color: #0f00b2
 }
