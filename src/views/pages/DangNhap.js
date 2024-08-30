@@ -2,19 +2,29 @@ import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import UserTest from '../../components/EmailTest';
 const DangNhap = ({ onLogin }) => {
     const navigate = useNavigate();
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
-        //Dieu kien dang nhap thanh cong...
+        let isUserValid = false;
 
-
-        onLogin();
-        navigate("/"); // Hien thi trang quan ly du an
+        //Tien hanh dang nhap
+        for (let i = 0; i < UserTest.length; i++) {
+            if (UserTest[i].email === values.email && UserTest[i].password === values.password) {
+                isUserValid = true;
+                onLogin();
+                navigate("/QLDuAn"); // Hien thi trang quan ly du an
+                break;
+            }
+        }
+        if (!isUserValid) {
+            alert('Thông tin đăng nhập không chính xác');
+        }
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
             <Form
                 name="login"
                 initialValues={{
@@ -22,6 +32,10 @@ const DangNhap = ({ onLogin }) => {
                 }}
                 style={{
                     minWidth: 360,
+                    background: '#f5f5f5',
+                    borderRadius: '5px',
+                    border: '1px solid #808080',
+                    padding: '20px 10px',
                 }}
                 onFinish={onFinish}
             >
@@ -31,6 +45,10 @@ const DangNhap = ({ onLogin }) => {
                         {
                             required: true,
                             message: 'Hãy nhập Email của bạn',
+                        },
+                        {
+                            type: 'email',
+                            message: 'Hãy nhập địa chỉ Email hợp lệ'
                         },
                     ]}
                 >

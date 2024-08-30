@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import '../styles/global.css'
 import DangNhap from './pages/DangNhap';
 import BangDuAn from './pages/QLDuAn';
@@ -13,7 +13,7 @@ function App() {
     setIsLoggedIn(true);
   }
 
-  if (isLoggedIn == true) {
+  if (isLoggedIn) {
     return (
       <>
         <PageMenu />
@@ -21,6 +21,7 @@ function App() {
           <Route path='/' element={<BangDuAn />} />
           <Route path='/QLDuAn' element={<BangDuAn />} />
           <Route path='/QLTask' element={<BangTask />} />
+          <Route path='*' element={<BangDuAn />} />
         </Routes>
       </>
     )
@@ -29,7 +30,8 @@ function App() {
     return (
       <>
         <Routes>
-          <Route path='*' element={<DangNhap onLogin={handleLogin} />} />
+          <Route path='/DangNhap' element={<DangNhap onLogin={handleLogin} />} />
+          <Route path='*' element={<Navigate to="/DangNhap" />} />
         </Routes>
       </>
     );
