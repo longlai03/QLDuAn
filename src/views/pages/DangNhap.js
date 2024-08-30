@@ -1,10 +1,18 @@
 import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex } from 'antd';
-const DangNhap = () => {
+import { useNavigate } from 'react-router-dom';
+const DangNhap = ({ onLogin }) => {
+    const navigate = useNavigate();
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
+        //Dieu kien dang nhap thanh cong...
+
+
+        onLogin();
+        navigate("/"); // Hien thi trang quan ly du an
     };
+
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Form
@@ -22,7 +30,7 @@ const DangNhap = () => {
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your Username!',
+                            message: 'Hãy nhập Email của bạn',
                         },
                     ]}
                 >
@@ -33,7 +41,7 @@ const DangNhap = () => {
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your Password!',
+                            message: 'Hãy nhập Password của bạn',
                         },
                     ]}
                 >
@@ -42,17 +50,17 @@ const DangNhap = () => {
                 <Form.Item>
                     <Flex justify="space-between" align="center">
                         <Form.Item name="remember" valuePropName="checked" noStyle>
-                            <Checkbox>Remember me</Checkbox>
+                            <Checkbox>Lưu đăng nhập</Checkbox>
                         </Form.Item>
-                        <a href="">Forgot password</a>
+                        <a href="">Quên mật khẩu</a>
                     </Flex>
                 </Form.Item>
 
                 <Form.Item>
                     <Button block type="primary" htmlType="submit">
-                        Log in
+                        Đăng Nhập
                     </Button>
-                    or <a href="">Register now!</a>
+                    Hoặc <a href="">Đăng ký ngay</a>
                 </Form.Item>
             </Form>
         </div>
