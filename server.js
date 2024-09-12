@@ -25,5 +25,12 @@ app.get('/api/project', (req, res) => {
         res.json({ project: results })
     })
 })
+app.get('/api/task', (req, res) => {
+    var sql = "SELECT * FROM task";
+    connection.query(sql, function (err, results) {
+        if (err) throw err;
+        res.json({ project: results })
+    })
+})
 
 app.listen(4000, () => console.log('App listening on port 4000'));

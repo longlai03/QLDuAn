@@ -172,7 +172,7 @@ const BangDuAn = () => {
     ];
 
 
-    return <Table columns={columns} dataSource={projectData} />;
+    return <Table columns={columns} dataSource={projectData} rowKey="project_id" />;
 };
 
 export default BangDuAn;
