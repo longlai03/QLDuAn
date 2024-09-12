@@ -15,11 +15,21 @@ const BangDuAn = () => {
         axios.get('/api/project')
             .then(res => {
                 const project = res.data;
-                console.log('Project Data: ', project);
-                setProjectData(project.project);
+                // console.log('Project Data: ', project);
+                // console.log('Project Data Array: ', project.project);
+                const project_list = project.project;
+                formatDate(project_list);
+                setProjectData(project_list);
             })
             .catch(error => console.log('Error fetching project data:', error));
     }, []);
+
+    const formatDate = (array) => {
+        for (let i = 0; i < array.length; i++) {
+            array[i].time_start = moment(array[i].time_start).format('DD-MM-YYYY');
+            array[i].time_end = moment(array[i].time_end).format('DD-MM-YYYY');
+        }
+    }
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -131,7 +141,9 @@ const BangDuAn = () => {
         {
             title: 'STT',
             key: 'STT',
-            render: (text, record, index) => index + 1,
+            render: (text, record, index) => {
+                return index + 1;
+            },
         },
         {
             title: 'Project ID',
@@ -149,14 +161,12 @@ const BangDuAn = () => {
             title: 'Thời gian bắt đầu',
             dataIndex: 'time_start',
             key: 'time_start',
-            render: (text) => moment(text).format('DD-MM-YYYY'),
             ...getColumnSearchProps('time_start', 'Thời gian bắt đầu'),
         },
         {
             title: 'Thời gian kết thúc',
             dataIndex: 'time_end',
             key: 'time_end',
-            render: (text) => moment(text).format('DD-MM-YYYY'),
             ...getColumnSearchProps('time_end', 'Thời gian kết thúc'),
         },
         {
