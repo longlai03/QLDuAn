@@ -1,9 +1,10 @@
 import { Navigate, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
-import '../styles/global.css'
-import DangNhap from './pages/DangNhap';
-import BangDuAn from './pages/QLDuAn';
-import BangTask from './pages/QLTask';
-import PageMenu from './pages/Menu';
+import './styles/global.css'
+import DangNhap from './components/DangNhap';
+import BangDuAn from './components/QLDuAn';
+import BangTask from './components/QLTask';
+import PageMenu from './components/Menu';
+import InsertFormQLDA from './components/InsertQLDA';
 import { useState } from 'react';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path='/' element={<BangDuAn />} />
           <Route path='/QLDuAn' element={<BangDuAn />} />
+          <Route path='/InsertQLDA' element={<InsertFormQLDA />} />
           <Route path='/QLTask' element={<BangTask />} />
           <Route path='*' element={<BangDuAn />} />
         </Routes>

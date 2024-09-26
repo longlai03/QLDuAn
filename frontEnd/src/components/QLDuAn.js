@@ -4,6 +4,7 @@ import { Button, Input, Space, Table } from 'antd';
 import Highlighter from 'react-highlight-words';
 import axios from 'axios';
 import moment from 'moment';
+import { NavLink, Outlet, Route } from 'react-router-dom';
 
 const BangDuAn = () => {
     const [searchText, setSearchText] = useState('');
@@ -182,7 +183,22 @@ const BangDuAn = () => {
     ];
 
 
-    return <Table columns={columns} dataSource={projectData} rowKey="project_id" />;
+    return (<>
+
+        <Table columns={columns} dataSource={projectData} rowKey="project_id" />
+        <div style={{ padding: '10px', display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+                type='primary'
+            >
+                <NavLink to={"/InsertQLDA"}>
+                    Thêm
+                </NavLink>
+            </Button>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Outlet />  {/* Render các route con */}
+        </div>
+    </>);
 };
 
 export default BangDuAn;
