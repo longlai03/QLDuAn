@@ -22,31 +22,80 @@ app.get('/api/test', (req, res) => {
 });
 
 app.get('/api/project', (req, res) => {
-    var sql = "SELECT * FROM project";
+    const sql = "SELECT * FROM project";
     connection.query(sql, function (err, results) {
         if (err) throw err;
         res.json({ project: results })
     })
 });
 app.get('/api/task', (req, res) => {
-    var sql = "SELECT * FROM task";
+    const sql = "SELECT * FROM task";
     connection.query(sql, function (err, results) {
         if (err) throw err;
         res.json({ project: results })
     })
 });
 
-app.post('/api/insert', (req, res) => {
+app.post('/api/insertQLDA', (req, res) => {
     const { projectName, timeStart, timeEnd } = req.body;
 
-    // Sử dụng placeholders (?) để bảo vệ chống SQL Injection
-    var sql = "INSERT INTO project (project_name, time_start, time_end) VALUES (?, ?, ?)";
+    const sql = "INSERT INTO project (project_name, time_start, time_end) VALUES (?, ?, ?)";
     const values = [projectName, timeStart, timeEnd];
 
     connection.query(sql, values, (err, results) => {
+        if (err) {
+            console.error('Error inserting project:', err);
+            res.status(500).json({ error: 'Failed to update project' });
+            return;
+        };
+        res.json({ project: results })
+    })
+});
+
+app.get('/api/updateQLDA/:projectId', (req, res) => {
+    const { projectId } = req.params;
+    const sql = "SELECT * FROM project WHERE project_id = ?";
+    connection.query(sql, [projectId], (err, results) => {
         if (err) throw err;
         res.json({ project: results })
     })
+});
+app.post('/api/updateQLDA/:projectId', (req, res) => {
+    const { projectId } = req.params;
+    const { projectName, timeStart, timeEnd } = req.body;
+    const sql = "UPDATE project SET project_name = ?, time_start = ?, time_end = ? WHERE project_id = ?";
+    const values = [projectName, timeStart, timeEnd, projectId];
+
+    connection.query(sql, values, (err, result) => {
+        if (err) {
+            console.error('Error updating project:', err);
+            res.status(500).json({ error: 'Failed to update project' });
+            return;
+        }
+        if (result.affectedRows === 0) {
+            res.status(404).json({ message: 'Project not found' });
+        } else {
+            res.json({ message: 'Project updated successfully' });
+        }
+    });
+});
+
+app.post('/api/deleteQLDA/:projectId', (req, res) => {
+    const { projectId } = req.params;
+    const sql = "DELETE FROM project WHERE project_id = ?";
+
+    connection.query(sql, [projectId], (err, result) => {
+        if (err) {
+            console.error('Error updating project:', err);
+            res.status(500).json({ error: 'Failed to delete project' });
+            return;
+        }
+        if (result.affectedRows === 0) {
+            res.status(404).json({ message: 'Project not found' });
+        } else {
+            res.json({ message: 'Project deleted successfully' });
+        }
+    });
 });
 
 app.listen(4000, () => console.log('App listening on port 4000'));

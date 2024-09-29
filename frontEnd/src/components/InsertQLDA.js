@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Checkbox, DatePicker, Form, Input, message } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -6,17 +6,23 @@ import { NavLink } from "react-router-dom"
 
 const InsertFormQLDA = () => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const onFinish = (values) => {
+        setLoading(true);
         console.log('Success:', values);
         const formatValues = {
             ...values,
             timeStart: values.timeStart.format('YYYY-MM-DD'),
-            timeEnd: values.timeStart.format('YYYY-MM-DD'),
+            timeEnd: values.timeEnd.format('YYYY-MM-DD'),
         }
-        axios.post('/api/insert', formatValues).then(res => {
+        axios.post('/api/insertQLDA', formatValues).then(res => {
             message.success("Them thanh cong");
-        }).catch(error => console.log(error));
-        navigate("/QLDuAn");
+            setLoading(false)
+            navigate("/QLDuAn");
+        }).catch(error => {
+            console.log(error);
+            message("Them that bai!")
+        });
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -83,6 +89,7 @@ const InsertFormQLDA = () => {
             </Form.Item>
 
             <Form.Item
+                labelCol={{ offset: 10, span: 12 }}
                 wrapperCol={{
                     offset: 10,
                     span: 12,
@@ -92,10 +99,11 @@ const InsertFormQLDA = () => {
                     Thêm dự án
                 </Button>
 
-                <NavLink to={"/QLDuAn"}>Quay lại</NavLink>
+                <Button style={{ marginLeft: 10 }}>
+                    <NavLink to={"/QLDuAn"}>Quay lại</NavLink>
+                </Button>
             </Form.Item>
         </Form>
     );
 }
 export default InsertFormQLDA;
-

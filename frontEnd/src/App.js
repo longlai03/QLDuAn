@@ -6,6 +6,7 @@ import BangTask from './components/QLTask';
 import PageMenu from './components/Menu';
 import InsertFormQLDA from './components/InsertQLDA';
 import { useState } from 'react';
+import UpdateFormQLDA from './components/UpdateQLDA';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -22,6 +23,7 @@ function App() {
           <Route path='/' element={<BangDuAn />} />
           <Route path='/QLDuAn' element={<BangDuAn />} />
           <Route path='/InsertQLDA' element={<InsertFormQLDA />} />
+          <Route path='/UpdateQLDA/:projectId' element={<UpdateFormQLDA />} />
           <Route path='/QLTask' element={<BangTask />} />
           <Route path='*' element={<BangDuAn />} />
         </Routes>
@@ -33,7 +35,7 @@ function App() {
       <>
         <Routes>
           <Route path='/DangNhap' element={<DangNhap onLogin={handleLogin} />} />
-          <Route path='*' element={<Navigate to="/DangNhap" />} />
+          <Route path='*' element={<DangNhap onLogin={handleLogin} />} />
         </Routes>
       </>
     );

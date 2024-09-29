@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Space, Table } from 'antd';
+import { Button, Input, message, Space, Table } from 'antd';
 import Highlighter from 'react-highlight-words';
 import axios from 'axios';
 import moment from 'moment';
-import { NavLink, Outlet, Route } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const BangDuAn = () => {
     const [searchText, setSearchText] = useState('');
@@ -13,6 +13,9 @@ const BangDuAn = () => {
     const searchInput = useRef(null);
 
     useEffect(() => {
+        loadData();
+    }, []);
+    const loadData = () => {
         axios.get('/api/project')
             .then(res => {
                 const project = res.data;
@@ -23,7 +26,7 @@ const BangDuAn = () => {
                 setProjectData(project_list);
             })
             .catch(error => console.log('Error fetching project data:', error));
-    }, []);
+    }
 
     const formatDate = (array) => {
         for (let i = 0; i < array.length; i++) {
@@ -42,6 +45,17 @@ const BangDuAn = () => {
         clearFilters();
         setSearchText('');
     };
+
+    const handleDelete = (projectId) => {
+        console.log("Deleting project ID:", projectId);
+        axios.post(`/api/deleteQLDA/${projectId}`).then(() => {
+            message.success("Xóa thành công!");
+            loadData();
+        }).catch(error => {
+            console.error('Error deleting project:', error);
+            message.error('Xóa thất bại!');
+        });
+    }
 
     const getColumnSearchProps = (dataIndex, title) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -175,8 +189,8 @@ const BangDuAn = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
-                    <a href="#">Sửa</a>
-                    <a href="#">Xóa</a>
+                    <NavLink to={`/UpdateQLDA/${record.project_id}`}>Sửa</NavLink>
+                    <NavLink onClick={() => handleDelete(record.project_id)}>Xóa</NavLink>
                 </Space>
             ),
         },
@@ -194,9 +208,6 @@ const BangDuAn = () => {
                     Thêm
                 </NavLink>
             </Button>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Outlet />  {/* Render các route con */}
         </div>
     </>);
 };
