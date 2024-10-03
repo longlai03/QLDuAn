@@ -197,19 +197,20 @@ const BangDuAn = () => {
     ];
 
 
-    return (<>
-
-        <Table columns={columns} dataSource={projectData} rowKey="project_id" />
-        <div style={{ padding: '10px', display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-                type='primary'
-            >
-                <NavLink to={"/InsertQLDA"}>
-                    Thêm
-                </NavLink>
-            </Button>
-        </div>
-    </>);
+    return (
+        <>
+            <Table columns={columns} dataSource={projectData} rowKey="project_id" />
+            <div style={{ padding: '10px', display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                    type='primary'
+                >
+                    <NavLink to={"/InsertQLDA"}>
+                        Thêm
+                    </NavLink>
+                </Button>
+            </div>
+        </>
+    );
 };
 
 export default BangDuAn;

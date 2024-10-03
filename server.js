@@ -29,13 +29,20 @@ app.get('/api/project', (req, res) => {
     })
 });
 app.get('/api/task', (req, res) => {
-    const sql = "SELECT * FROM task";
+    const sql = "SELECT task.*,project.project_name FROM task JOIN project ON task.project_id = project.project_id";
     connection.query(sql, function (err, results) {
         if (err) throw err;
-        res.json({ project: results })
+        res.json({ task: results })
     })
 });
 
+app.get('/api/user', (req, res) => {
+    const sql = "SELECT * FROM user";
+    connection.query(sql, function (err, results) {
+        if (err) throw err;
+        res.json({ user: results })
+    })
+});
 app.post('/api/insertQLDA', (req, res) => {
     const { projectName, timeStart, timeEnd } = req.body;
 
@@ -49,6 +56,21 @@ app.post('/api/insertQLDA', (req, res) => {
             return;
         };
         res.json({ project: results })
+    })
+});
+app.post('/api/insertQLTask', (req, res) => {
+    const { projectId, taskName, planStartTime, planEndTime, actualStartTime, actualEndTime, status } = req.body;
+
+    const sql = "INSERT INTO task ( project_id, task_name, plan_start_time, plan_end_time, actual_start_time, actual_end_time, status) VALUES (?,?, ?, ?, ?, ?, ?)";
+    const values = [projectId, taskName, planStartTime, planEndTime, actualStartTime, actualEndTime, status];
+
+    connection.query(sql, values, (err, results) => {
+        if (err) {
+            console.error('Error inserting project:', err);
+            res.status(500).json({ error: 'Failed to update project' });
+            return;
+        };
+        res.json({ task: results })
     })
 });
 

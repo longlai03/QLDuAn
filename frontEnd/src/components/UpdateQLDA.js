@@ -108,7 +108,7 @@ const UpdateFormQLDA = () => {
                 </Button>
 
                 <Button style={{ marginLeft: 10 }}>
-                    <NavLink to={"/QLDuAn"}>Quay lại</NavLink>
+                    <NavLink style={{ textDecoration: 'none' }} to={"/QLDuAn"}>Quay lại</NavLink>
                 </Button>
             </Form.Item>
         </Form>

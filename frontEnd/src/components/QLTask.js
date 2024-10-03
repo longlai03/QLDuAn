@@ -1,25 +1,40 @@
-
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space, Table } from 'antd';
 import Highlighter from 'react-highlight-words';
-const data = [
-    {
-        key: '1',
-        STT: 1,
-        ProjectID: '1',
-        TaskName: 'abc',
-        PlanStartTime: '1-1-2002',
-        PlanEndTime: '2-2-2003',
-        ActualStartTime: '2-1-2002',
-        ActualEndTime: '2-2-2003',
-        Status: 'OK',
-    }
-];
+import axios from 'axios';
+import moment from 'moment';
+import { NavLink } from 'react-router-dom';
 const BangTask = () => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
+    const [taskData, setTaskData] = useState([]);
     const searchInput = useRef(null);
+
+    useEffect(() => {
+        loadData()
+    })
+    const loadData = () => {
+        axios.get('/api/task')
+            .then(res => {
+                const task = res.data;
+                // console.log('task Data: ', task);
+                // console.log('task Data Array: ', task.task);
+                const task_list = task.task;
+                formatDate(task_list);
+                setTaskData(task_list);
+            })
+            .catch(error => console.log('Error fetching project data:', error));
+    }
+
+    const formatDate = (array) => {
+        for (let i = 0; i < array.length; i++) {
+            array[i].plan_start_time = moment(array[i].plan_start_time).format('DD-MM-YYYY');
+            array[i].plan_end_time = moment(array[i].plan_end_time).format('DD-MM-YYYY');
+            array[i].actual_start_time = moment(array[i].actual_start_time).format('DD-MM-YYYY');
+            array[i].actual_end_time = moment(array[i].actual_end_time).format('DD-MM-YYYY');
+        }
+    }
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
         setSearchText(selectedKeys[0]);
@@ -128,54 +143,62 @@ const BangTask = () => {
             title: 'STT',
             dataIndex: 'STT',
             key: 'STT',
-            ...getColumnSearchProps('STT', 'STT'),
+            render: (text, record, index) => {
+                return index + 1;
+            },
         },
         {
             title: 'Project ID',
-            dataIndex: 'ProjectID',
-            key: 'ProjectID',
-            ...getColumnSearchProps('ProjectID', 'Project ID'),
+            dataIndex: 'project_id',
+            key: 'project_id',
+            ...getColumnSearchProps('project_id', 'Project ID'),
+        },
+        {
+            title: 'Project Name',
+            dataIndex: 'project_name',
+            key: 'project_name',
+            ...getColumnSearchProps('project_name', 'Project Name'),
         },
         {
             title: 'Task Name',
-            dataIndex: 'TaskName',
-            key: 'TaskName',
-            ...getColumnSearchProps('TaskName', 'Task Name'),
+            dataIndex: 'task_name',
+            key: 'task_name',
+            ...getColumnSearchProps('task_name', 'Task Name'),
 
         },
         {
             title: 'Plan Start Time',
-            dataIndex: 'PlanStartTime',
-            key: 'PlanStartTime',
-            ...getColumnSearchProps('PlanStartTime', 'Plan Start Time'),
+            dataIndex: 'plan_start_time',
+            key: 'plan_start_time',
+            ...getColumnSearchProps('plan_start_time', 'Plan Start Time'),
 
         },
         {
             title: 'Plan End Time',
-            dataIndex: 'PlanEndTime',
-            key: 'PlanEndTime',
-            ...getColumnSearchProps('PlanEndTime', 'Plan End Time'),
+            dataIndex: 'plan_end_time',
+            key: 'plan_end_time',
+            ...getColumnSearchProps('plan_end_time', 'Plan End Time'),
 
         },
         {
             title: 'Actual Start Time',
-            dataIndex: 'ActualStartTime',
-            key: 'ActualStartTime',
-            ...getColumnSearchProps('ActualStartTime', 'Actual Start Time'),
+            dataIndex: 'actual_start_time',
+            key: 'actual_start_time',
+            ...getColumnSearchProps('actual_start_time', 'Actual Start Time'),
 
         },
         {
             title: 'Actual End Time',
-            dataIndex: 'ActualEndTime',
-            key: 'ActualEndTime',
-            ...getColumnSearchProps('ActualEndTime', 'Actual End Time'),
+            dataIndex: 'actual_end_time',
+            key: 'actual_end_time',
+            ...getColumnSearchProps('actual_end_time', 'Actual End Time'),
 
         },
         {
             title: 'Trạng thái',
-            dataIndex: 'Status',
-            key: 'Status',
-            ...getColumnSearchProps('Status', 'Trạng thái'),
+            dataIndex: 'status',
+            key: 'status',
+            ...getColumnSearchProps('status', 'Trạng thái'),
         },
         {
             title: 'Thao tác',
@@ -188,6 +211,19 @@ const BangTask = () => {
             ),
         },
     ];
-    return <Table columns={columns} dataSource={data} />;
+    return (
+        <>
+            <Table columns={columns} dataSource={taskData} />
+            <div style={{ padding: '10px', display: 'flex', justifyContent: 'flex-end' }}>
+                <Button
+                    type='primary'
+                >
+                    <NavLink to={"/InsertQLTask"}>
+                        Thêm
+                    </NavLink>
+                </Button>
+            </div>
+        </>
+    );
 };
 export default BangTask;

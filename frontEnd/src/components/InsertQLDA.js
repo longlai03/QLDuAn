@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, DatePicker, Form, Input, message } from 'antd';
+import { Button, DatePicker, Form, Input, message } from 'antd';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from "react-router-dom"
@@ -72,7 +72,7 @@ const InsertFormQLDA = () => {
                     },
                 ]}
             >
-                <DatePicker format={DateFormat} />
+                <DatePicker placeholder="Chọn thời gian" format={DateFormat} />
             </Form.Item>
 
             <Form.Item
@@ -85,7 +85,7 @@ const InsertFormQLDA = () => {
                     },
                 ]}
             >
-                <DatePicker format={DateFormat} />
+                <DatePicker placeholder="Chọn thời gian" format={DateFormat} />
             </Form.Item>
 
             <Form.Item
@@ -100,7 +100,7 @@ const InsertFormQLDA = () => {
                 </Button>
 
                 <Button style={{ marginLeft: 10 }}>
-                    <NavLink to={"/QLDuAn"}>Quay lại</NavLink>
+                    <NavLink style={{ textDecoration: 'none' }} to={"/QLDuAn"}>Quay lại</NavLink>
                 </Button>
             </Form.Item>
         </Form>

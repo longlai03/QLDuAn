@@ -2,17 +2,35 @@ import React, { useEffect, useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import UserTest from './EmailTest';
 import axios from 'axios';
 const DangNhap = ({ onLogin }) => {
     const navigate = useNavigate();
+    const [userData, setUserData] = useState();
+    useEffect(() => {
+        getUser();
+    }, []);
+    const getUser = () => {
+        axios.get('/api/user')
+            .then(res => {
+                const user = res.data;
+                const userList = user.user;
+
+                // console.log('UserList: ', userList)
+                // console.log('user: ', user);
+                // console.log('user Data Array: ', user.user);
+                setUserData(userList);
+
+            })
+            .catch(error => console.log('Error fetching user data:', error));
+    }
+
     const onFinish = (values) => {
         console.log('Received values of form: ', values);
         let isUserValid = false;
 
         //Tien hanh dang nhap
-        for (let i = 0; i < UserTest.length; i++) {
-            if (UserTest[i].email === values.email && UserTest[i].password === values.password) {
+        for (let i = 0; i < userData.length; i++) {
+            if (userData[i].user_name === values.email && userData[i].user_password === values.password) {
                 isUserValid = true;
                 onLogin();
                 navigate("/QLDuAn"); // Hien thi trang quan ly du an

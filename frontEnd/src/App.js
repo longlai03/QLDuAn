@@ -1,4 +1,4 @@
-import { Navigate, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import './styles/global.css'
 import DangNhap from './components/DangNhap';
 import BangDuAn from './components/QLDuAn';
@@ -7,6 +7,7 @@ import PageMenu from './components/Menu';
 import InsertFormQLDA from './components/InsertQLDA';
 import { useState } from 'react';
 import UpdateFormQLDA from './components/UpdateQLDA';
+import InsertFormQLTask from './components/InsertQLTask';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,31 +16,29 @@ function App() {
     setIsLoggedIn(true);
   }
 
-  if (isLoggedIn) {
-    return (
-      <>
-        <PageMenu />
-        <Routes>
-          <Route path='/' element={<BangDuAn />} />
-          <Route path='/QLDuAn' element={<BangDuAn />} />
-          <Route path='/InsertQLDA' element={<InsertFormQLDA />} />
-          <Route path='/UpdateQLDA/:projectId' element={<UpdateFormQLDA />} />
-          <Route path='/QLTask' element={<BangTask />} />
-          <Route path='*' element={<BangDuAn />} />
-        </Routes>
-      </>
-    )
-  }
-  else {
-    return (
-      <>
-        <Routes>
-          <Route path='/DangNhap' element={<DangNhap onLogin={handleLogin} />} />
-          <Route path='*' element={<DangNhap onLogin={handleLogin} />} />
-        </Routes>
-      </>
-    );
-  }
+  return (
+    <>
+      {isLoggedIn ? (<PageMenu />) : null}
+      <Routes>
+        {isLoggedIn ? (
+          <>
+            <Route path='/' element={<BangDuAn />} />
+            <Route path='/QLDuAn' element={<BangDuAn />} />
+            <Route path='/InsertQLDA' element={<InsertFormQLDA />} />
+            <Route path='/UpdateQLDA/:projectId' element={<UpdateFormQLDA />} />
+            <Route path='/QLTask' element={<BangTask />} />
+            <Route path='/InsertQLTask' element={<InsertFormQLTask />} />
+            <Route path='*' element={<BangDuAn />} />
+          </>
+        ) : (
+          <><Route path='/DangNhap' element={<DangNhap onLogin={handleLogin} />} />
+            <Route path='*' element={<DangNhap onLogin={handleLogin} />} />
+          </>
+        )}
+
+      </Routes>
+    </>
+  )
 }
 
 export default App;
