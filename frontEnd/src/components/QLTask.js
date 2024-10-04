@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Space, Table } from 'antd';
+import { Button, Input, message, Space, Table } from 'antd';
 import Highlighter from 'react-highlight-words';
 import axios from 'axios';
 import moment from 'moment';
@@ -12,7 +12,7 @@ const BangTask = () => {
     const searchInput = useRef(null);
 
     useEffect(() => {
-        loadData()
+        loadData();
     })
     const loadData = () => {
         axios.get('/api/task')
@@ -44,6 +44,16 @@ const BangTask = () => {
         clearFilters();
         setSearchText('');
     };
+    const handleDelete = (taskId) => {
+        console.log("Deleting task ID:", taskId);
+        axios.post(`/api/deleteQLTask/${taskId}`).then(() => {
+            message.success("Xóa thành công!");
+            loadData();
+        }).catch(error => {
+            console.error('Error deleting project:', error);
+            message.error('Xóa thất bại!');
+        });
+    }
     const getColumnSearchProps = (dataIndex, title) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
             <div
@@ -205,8 +215,8 @@ const BangTask = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <a>Sửa {record.name}</a>
-                    <a>Xóa</a>
+                    <NavLink to={`/UpdateQLTask/${record.task_id}`}>Sửa</NavLink>
+                    <NavLink onClick={() => handleDelete(record.task_id)}>Xóa</NavLink>
                 </Space>
             ),
         },

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Flex } from 'antd';
+import { Button, Checkbox, Form, Input, Flex, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 const DangNhap = ({ onLogin }) => {
@@ -38,7 +38,7 @@ const DangNhap = ({ onLogin }) => {
             }
         }
         if (!isUserValid) {
-            alert('Thông tin đăng nhập không chính xác');
+            message.warning("Thông tin đăng nhập không chính xác");
         }
     };
 

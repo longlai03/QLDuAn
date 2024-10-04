@@ -56,15 +56,15 @@ const InsertFormQLTask = () => {
 
     const StatusOption = [
         {
-            value: "notYetStart",
+            value: "Not Yet Start",
             label: "Not Yet Start",
         },
         {
-            value: "doing",
+            value: "Doing",
             label: "Doing",
         },
         {
-            value: "done",
+            value: "Done",
             label: "Done",
         },
     ]

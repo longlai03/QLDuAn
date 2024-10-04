@@ -8,6 +8,7 @@ import InsertFormQLDA from './components/InsertQLDA';
 import { useState } from 'react';
 import UpdateFormQLDA from './components/UpdateQLDA';
 import InsertFormQLTask from './components/InsertQLTask';
+import UpdateFormQLTask from './components/UpdateQLTask';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -28,6 +29,7 @@ function App() {
             <Route path='/UpdateQLDA/:projectId' element={<UpdateFormQLDA />} />
             <Route path='/QLTask' element={<BangTask />} />
             <Route path='/InsertQLTask' element={<InsertFormQLTask />} />
+            <Route path='/UpdateQLTask/:taskId' element={<UpdateFormQLTask />} />
             <Route path='*' element={<BangDuAn />} />
           </>
         ) : (

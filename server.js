@@ -82,6 +82,16 @@ app.get('/api/updateQLDA/:projectId', (req, res) => {
         res.json({ project: results })
     })
 });
+
+app.get('/api/updateQLTask/:taskId', (req, res) => {
+    const { taskId } = req.params;
+    const sql = "SELECT task.*,project.project_name FROM task JOIN project ON task.project_id = project.project_id WHERE task_id = ?";
+    connection.query(sql, [taskId], (err, results) => {
+        if (err) throw err;
+        res.json({ task: results })
+    })
+});
+
 app.post('/api/updateQLDA/:projectId', (req, res) => {
     const { projectId } = req.params;
     const { projectName, timeStart, timeEnd } = req.body;
@@ -102,13 +112,33 @@ app.post('/api/updateQLDA/:projectId', (req, res) => {
     });
 });
 
+app.post('/api/updateQLTask/:taskId', (req, res) => {
+    const { taskId } = req.params;
+    const { taskName, planStartTime, planEndTime, actualStartTime, actualEndTime, status } = req.body;
+    const sql = "UPDATE task SET task_name = ?, plan_start_time = ?, plan_end_time = ?, actual_start_time = ?, actual_end_time = ?, status = ? WHERE task_id = ?";
+    const values = [taskName, planStartTime, planEndTime, actualStartTime, actualEndTime, status, taskId];
+
+    connection.query(sql, values, (err, result) => {
+        if (err) {
+            console.error('Error updating task:', err);
+            res.status(500).json({ error: 'Failed to update task' });
+            return;
+        }
+        if (result.affectedRows === 0) {
+            res.status(404).json({ message: 'Task not found' });
+        } else {
+            res.json({ message: 'Task updated successfully' });
+        }
+    });
+});
+
 app.post('/api/deleteQLDA/:projectId', (req, res) => {
     const { projectId } = req.params;
     const sql = "DELETE FROM project WHERE project_id = ?";
 
     connection.query(sql, [projectId], (err, result) => {
         if (err) {
-            console.error('Error updating project:', err);
+            console.error('Error deleting project:', err);
             res.status(500).json({ error: 'Failed to delete project' });
             return;
         }
@@ -116,6 +146,24 @@ app.post('/api/deleteQLDA/:projectId', (req, res) => {
             res.status(404).json({ message: 'Project not found' });
         } else {
             res.json({ message: 'Project deleted successfully' });
+        }
+    });
+});
+
+app.post('/api/deleteQLTask/:taskId', (req, res) => {
+    const { taskId } = req.params;
+    const sql = "DELETE FROM task WHERE task_id = ?";
+
+    connection.query(sql, [taskId], (err, result) => {
+        if (err) {
+            console.error('Error deleting task:', err);
+            res.status(500).json({ error: 'Failed to delete task' });
+            return;
+        }
+        if (result.affectedRows === 0) {
+            res.status(404).json({ message: 'Task not found' });
+        } else {
+            res.json({ message: 'Task deleted successfully' });
         }
     });
 });
